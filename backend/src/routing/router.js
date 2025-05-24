@@ -1,21 +1,16 @@
 import express from "express"
+import AuthRouter from "../modules/auth/auth.route.js"
 
-const exp=express.Router()
+const router=express.Router()
 
-const router=exp
-
-router.use('/auth',(req,res)=>{
-    res.json({
-        message:"Hello"
-    })
-})
+router.use('/auth',AuthRouter)
 
 
 
 router.use("/",(req,res)=>{
     res.json({
         result:{},
-        messgae:"You have entered the wrong url",
+        message:"You have entered the wrong url",
         meta:null
     })
 })
