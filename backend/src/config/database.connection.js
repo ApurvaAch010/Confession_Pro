@@ -1,8 +1,18 @@
 import mysql from "mysql"
+import dotenv from "dotenv"
+dotenv.config()
 
-let connection=mysql.connection({
-    host:'',
-    database:'',
-    user:'',
-    password:''
+
+let pool=mysql.createPool({
+    host:process.env.MY_SQL_HOST,
+    database:process.env.MY_SQL_DB,
+    user:process.env.MY_SQL_USER,
+    password:process.env.MY_SQL_PASS
+})
+
+pool.getConnection((err)=>{
+    if(err){
+     console.log("Problem in conncetion database:",err)
+    }
+    console.log("Databse connected");
 })

@@ -1,5 +1,7 @@
 import express from "express"
 import router from "../routing/router.js"
+import "./database.connection.js"
+
 
 const app=express()
 
