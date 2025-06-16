@@ -10,6 +10,4 @@ router.post('/register',bodyvalidator(registerVal),Auth.register)
 router.post('/login',bodyvalidator(loginVal),Auth.login)
 router.get('/dashboard',LoginCheck,Auth.dashboard)
 
-router.post('/login',Auth.register)
-
 export default router
