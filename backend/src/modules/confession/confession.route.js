@@ -9,7 +9,7 @@ const router=express.Router()
 
 router.post('/create',bodyvalidator(postConf),LoginCheck,Confess.create)
 
-router.get('/getall',Confess.getAll)
+router.get('/getAll',Confess.getAll)
 
 router.put('/update/:id',bodyvalidator(updateConf),LoginCheck,Confess.update)
 

@@ -7,7 +7,7 @@ const postConf = Yup.object({
     content: Yup.string()
         .required('Description is required')
         .min(10, 'Description must be at least 10 characters'),
-    is_anonymous: Yup.bool()
+    is_anonymous: Yup.bool().default(true)
 });
 
 const updateConf = Yup.object({
