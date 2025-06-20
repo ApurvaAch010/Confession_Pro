@@ -9,5 +9,6 @@ const router=express.Router()
 router.post('/register',bodyvalidator(registerVal),Auth.register)
 router.post('/login',bodyvalidator(loginVal),Auth.login)
 router.get('/dashboard',LoginCheck,Auth.dashboard)
+router.put('/logout',LoginCheck,Auth.logout)
 
 export default router

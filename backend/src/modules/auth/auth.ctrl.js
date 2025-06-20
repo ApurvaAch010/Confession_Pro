@@ -69,7 +69,7 @@ class Authorization {
                     expiresIn: "1d"
                 })
 
-                pool.query('UPDATE users SET access_token=?,referesh_token=? WHERE id=?', [accessToken, refreshToken, user.id], (err, results) => {
+                pool.query('UPDATE users SET access_token=?,refresh_token=? WHERE id=?', [accessToken, refreshToken, user.id], (err, results) => {
                     if (err) {
                         console.log(err)
                         return res.status(404).json({ error: "Database error" });
@@ -80,7 +80,7 @@ class Authorization {
                     return res.status(200).json({
                         result: {
                             userName: user.username,
-                            accessToken:accessToken,
+                            accessToken: accessToken,
                             refreshToken: refreshToken
                         },
                         message: "Login Succesfull",
@@ -107,8 +107,8 @@ class Authorization {
                     username: loggedInUser.username,
                     email: loggedInUser.email
                 },
-                message:"Your profile",
-                meta:null
+                message: "Your profile",
+                meta: null
 
             })
 
@@ -117,6 +117,41 @@ class Authorization {
             // next(error);
         }
     }
+
+    logout = async (req, res, next) => {
+        try {
+            const user=req.user
+
+            // Use UPDATE instead of DELETE to clear tokens
+            pool.query(
+                'UPDATE users SET access_token = NULL, refresh_token = NULL WHERE id = ?',
+                [user.id],
+                (err, results) => {
+                    if (err) {
+                        console.log(err);
+                        // Use 500 for server errors
+                        return res.status(500).json({ error: "Database error" });
+                    }
+
+                    if (results.affectedRows === 0) {
+                        return res.status(404).json({ error: "User not found" });
+                    }
+
+                    return res.status(200).json({
+                        result: {},
+                        message: "Successfully logged out",
+                        meta: null
+                    });
+                }
+            );
+        }
+        catch (err) {
+            console.error(err);
+            next(new AppErr({ message: "Problem while logging out", code: 500 }));
+        }
+    }
+
+
 
 }
 

@@ -106,6 +106,10 @@ class Confession {
                         console.log(err)
                         return res.status(404).json({ error: "Database error" });
                     }
+                    if (results.affectedRows === 0) {
+                        return res.status(404).json({ error: "No such confession exists" });
+                    }
+
                     res.status(200).json({
                         reuslt: {
                             confessionId: id
