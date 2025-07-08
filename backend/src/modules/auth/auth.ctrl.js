@@ -7,11 +7,11 @@ dotenv.config()
 
 class Authorization {
     register = async (req, res, next) => {
+        console.log("req.body:", req.body)
         try {
-            let { username, email, password } = req.body;
+            let { username, email, password,confirmPassword } = req.body
             let newpass = await bcrypt.hash(password, 10);
             const user = { username, email, password_hash: newpass }
-            // console.log("user:", user)
             pool.query(`INSERT INTO users SET ?`, user, (err, result) => {
                 if (err) {
                     if (err.code === 'ER_DUP_ENTRY') {
@@ -19,7 +19,7 @@ class Authorization {
                     }
                     return res.status(500).json({ error: 'Database error', details: err.message });
                 }
-
+                console.log("here")
                 res.status(200).json({
                     result: {},
                     message: "Successfully registered",

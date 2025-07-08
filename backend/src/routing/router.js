@@ -10,7 +10,7 @@ router.use('/posts',ConfessRouter)
 
 
 router.use("/",(req,res)=>{
-    res.json({
+    res.status(404).json({
         result:{},
         message:"You have entered the wrong url",
         meta:null

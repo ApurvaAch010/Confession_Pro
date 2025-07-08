@@ -1,10 +1,16 @@
 import express from "express"
 import router from "../routing/router.js"
 import "./database.connection.js"
-
+import cors from "cors"
 
 const app=express()
 
+app.use(cors(
+    {
+        origin: "*",
+        credentials: true,
+    }
+))
 
 app.use(express.json())
 app.use(express.urlencoded({

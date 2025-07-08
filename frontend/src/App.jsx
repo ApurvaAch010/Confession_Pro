@@ -1,6 +1,10 @@
+import Form from "./components/form"
+import Loading from "./components/loading"
+
 function App(){
   return(
-    <h1>Hello</h1>
+    <Form/>
+    // <Loading/>
   )
 }
 export default App
