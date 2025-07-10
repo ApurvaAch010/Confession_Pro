@@ -1,10 +1,9 @@
-import Form from "./components/form"
-import Loading from "./components/loading"
+import HomePage from "./components/homepage"
 
 function App(){
   return(
-    <Form/>
-    // <Loading/>
+    // <Form/>
+    <HomePage/>
   )
 }
 export default App

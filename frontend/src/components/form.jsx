@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Shield, Lock, Users, Heart, CloudCog } from "lucide-react";
 import "../styles/form.css"
 import axios from "axios"
+import Loading from "./loading";
 
 
 const Form = () => {
@@ -14,6 +15,7 @@ const Form = () => {
     const confirmPasswordRef = useRef();
     const signInemailRef = useRef();
     const signInpasswordRef = useRef();
+    const [loading, setLoading] = useState(false);
 
     const createAccount = async (e) => {
         e.preventDefault();
@@ -73,56 +75,68 @@ const Form = () => {
 
     }
 
+    useEffect(() => {
+        setLoading(true);
+        setTimeout(() => {
+            setLoading(false);
+        }, 1700);
+    }, [])
+
 
     return (
 
         <>
-            <div className="main">
-                <div className="main-text">
-                    <Heart size={50} color="white" style={{ top: "30px", borderRadius: "50px", padding: "10px", background: "linear-gradient(to right,#600fa1, #1525cf)" }} />
-                    <h1>Confess</h1>
-                    <p style={{ color: "gray" }}>Share your thoughts anonymously</p>
-                </div>
-                <div className="box" style={{ marginTop: "10px", height: signup ? "550px" : "400px" }}>
 
-                    <div className="top">
-                        <span><Shield size={15} />Anonymous</span>
-                        <span><Lock size={15} /> Secure</span>
-                        <span><Users size={15} /> Safe Space</span>
-                    </div>
+            {
+                loading ? <Loading /> :
+                    <div className="main">
+                        <div className="main-text">
+                            <Heart size={30} color="white" style={{ top: "30px", borderRadius: "50px", padding: "10px", background: "linear-gradient(to right,#600fa1, #1525cf)" }} />
+                            <h1>Confess</h1>
+                            <p style={{ color: "gray" }}>Share your thoughts anonymously</p>
+                        </div>
+                        <div className="box" style={{ marginTop: "10px", height: signup ? "550px" : "400px" }}>
 
-                    <div className="switch">
-                        <button className="switch-btn" onClick={() => { setSignup(!signup) }} style={{ background: signup ? "white" : "rgb(182, 177, 177)", padding: "7px", borderRadius: '10px' }}>Sign IN</button>
-                        <button className="switch-btn" onClick={() => { setSignup(!signup) }}
-                            style={{ background: signup ? "rgb(182, 177, 177)" : "white", padding: "7px", borderRadius: '10px' }}>Sign Up</button>
-                    </div>
-
-
-                    {
-                        signup ? <div className="form">
-                            <label htmlFor="">Username</label>
-                            <input type="text" placeholder="Choose your username" ref={usernameRef} />
-                            <label htmlFor="">Email</label>
-                            <input type="email" placeholder="your@email.com" ref={emailRef} />
-                            <label htmlFor="">Password</label>
-                            <input type="password" placeholder="Create a password" ref={passwordRef} />
-                            <label htmlFor="">Confirm Password</label>
-                            <input type="password" placeholder="Confirm your password" ref={confirmPasswordRef} />
-
-                            <button className="submit-btn" onClick={(e) => { createAccount(e) }}>Create Account</button>
-                        </div> :
-                            <div className="form">
-                                <label htmlFor="">Email</label>
-                                <input type="email" placeholder="your@email.com" ref={signInemailRef}/>
-                                <label htmlFor="">Password</label>
-                                <input type="password" placeholder="Enter your password" ref={signInpasswordRef}/>
-
-                                <button className="submit-btn" onClick={(e) => {signIn(e)}}>Sign In</button>
+                            <div className="top">
+                                <span><Shield size={15} />Anonymous</span>
+                                <span><Lock size={15} /> Secure</span>
+                                <span><Users size={15} /> Safe Space</span>
                             </div>
-                    }
-                </div>
-                <p style={{ color: "gray" }}>By continuing, you agree to out Terms of Services and Privacy Policy</p>
-            </div>
+
+                            <div className="switch">
+                                <button className="switch-btn" onClick={() => { setSignup(!signup) }} style={{ background: signup ? "white" : "rgb(182, 177, 177)", padding: "7px", borderRadius: '10px' }}>Sign IN</button>
+                                <button className="switch-btn" onClick={() => { setSignup(!signup) }}
+                                    style={{ background: signup ? "rgb(182, 177, 177)" : "white", padding: "7px", borderRadius: '10px' }}>Sign Up</button>
+                            </div>
+
+
+                            {
+                                signup ? <div className="form">
+                                    <label htmlFor="">Username</label>
+                                    <input type="text" placeholder="Choose your username" ref={usernameRef} />
+                                    <label htmlFor="">Email</label>
+                                    <input type="email" placeholder="your@email.com" ref={emailRef} />
+                                    <label htmlFor="">Password</label>
+                                    <input type="password" placeholder="Create a password" ref={passwordRef} />
+                                    <label htmlFor="">Confirm Password</label>
+                                    <input type="password" placeholder="Confirm your password" ref={confirmPasswordRef} />
+
+                                    <button className="submit-btn" onClick={(e) => { createAccount(e) }}>Create Account</button>
+                                </div> :
+                                    <div className="form">
+                                        <label htmlFor="">Email</label>
+                                        <input type="email" placeholder="your@email.com" ref={signInemailRef} />
+                                        <label htmlFor="">Password</label>
+                                        <input type="password" placeholder="Enter your password" ref={signInpasswordRef} />
+
+                                        <button className="submit-btn" onClick={(e) => { signIn(e) }}>Sign In</button>
+                                    </div>
+                            }
+                        </div>
+                        <p style={{ color: "gray" }}>By continuing, you agree to out Terms of Services and Privacy Policy</p>
+                    </div>
+            }
+
         </>
     )
 }

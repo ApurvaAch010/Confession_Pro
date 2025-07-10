@@ -1,0 +1,38 @@
+.navbar {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: whitesmoke;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-left,
+.navbar-right {
+    font-size: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+
+/* .navbar-right span {
+    background: linear-gradient(to right, rgb(96, 15, 161), rgb(21, 37, 207));
+        padding: 10px;
+        border-radius: 70%;
+        display: inline-block;
+} */
+
+.navbar-btn {
+    padding: 8px 16px;
+    background: linear-gradient(to right, #600fa1, #1525cf);
+    color: white;
+    font-size: 13px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.navbar-pfp {
+    /* background: linear-gradient(to right,#600fa1, #1525cf); */
+    cursor: pointer;
+}
