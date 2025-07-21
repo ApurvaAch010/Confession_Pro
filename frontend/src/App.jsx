@@ -1,9 +1,12 @@
-import HomePage from "./components/homepage"
+import CreateConfession from "./components/confession/createconfessoin";
+import HomeBody from "./components/homebody";
+
 
 function App(){
   return(
     // <Form/>
-    <HomePage/>
+    // <HomeBody/>
+    <CreateConfession/>
   )
 }
 export default App

@@ -1,5 +1,5 @@
 import HomeBody from "./homebody"
-import Navbar from "./Navbar"
+import Navbar from "../components/navbar/Navbar.jsx"
 
 
 const HomePage=()=>{

@@ -1,0 +1,215 @@
+.content-top{
+
+    
+    display: flex;
+    /* background-color: red; */
+    justify-content:first baseline;
+    align-items: center;
+    width: 100%;
+    padding: 7px;
+    color: gray;
+    gap: 10px;
+}
+
+.content-main{
+    display: flex;
+    color:black;
+    gap: 30px;
+}
+
+
+.icon-heart{
+    background: linear-gradient(to right,#600fa1, #1525cf);
+    padding: 5px;
+    border-radius: 50px;
+}
+.right-content{
+    display: flex;
+    color:black;
+    gap: 10px;
+}
+.left-content{
+    display: flex;
+    gap: 10px;
+}
+
+.right-content h1{
+    font-size: 20px;
+}
+
+.confess-main{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.box-confess{
+    top: 40px;
+    display: flex;
+    padding:10px;
+    /* justify-content: center; */
+    position:relative;
+    flex-direction: column;
+    width: 580px;
+    height: 780px;
+    border-radius: 10px;
+    background:white;
+    box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 0.1);
+}
+
+.top-confess{
+    display: flex;
+    justify-content:start;
+    /* flex-direction: column; */
+    gap: 20px;
+}
+
+.top-h1{
+    font-weight: bold;
+}
+
+.logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(226, 217, 217);
+    
+    padding: 2px 14px 2px 14px;
+    font-size:10px;
+    border-radius: 14px;
+}
+
+
+
+.confess-body{
+    margin-top: 10px;
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid rgb(158, 150, 150);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.write-confession-top h1{
+    font: bold;
+    font-size: 16px;
+}
+
+.input-box{
+    display: flex;
+    flex-direction: column;
+    gap: 20px   ;
+}
+.input-box-confession {
+    border-radius: 15px;
+    width: 550px;
+    height: 300px;
+    padding: 10px; /* Increase padding for better spacing */
+    box-sizing: border-box;
+    vertical-align: top;
+    resize: none; /* Prevent resizing if you want fixed size */
+}
+
+.input-box-title{
+    padding: 10px;
+    border:0.5px solid rgb(196, 182, 182);
+    border-radius: 10px;
+    box-sizing: border-box;
+    width:350px;
+}
+
+
+.anonymous-selection{
+    background-color: rgb(233, 214, 214);
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.selection-left{
+    display: flex;
+    gap: 5px    ;
+}
+
+.eye-icon{
+    background-color: rgb(182, 169, 169);
+    border-radius: 5px 14px 5px 14px;
+    height: 30px;
+}
+
+.left-content-top h1{
+    font-size:18px;
+    font: bold;
+}
+
+.left-content-bottom p{
+    font-size:12px;
+}
+
+.selection-right-button{
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+}
+
+.bottom-buttons{
+    position: relative;
+    top:40px;
+    display: flex;
+    justify-content: space-around;
+}
+
+
+.cancel-button,
+.post-button {
+    border-radius: 8px;
+    padding: 10px;
+    width: 200px;
+}
+
+.cancel-button{
+    border:0.5px solid rgb(209, 192, 192);
+    background-color: white;
+}
+
+.post-button{
+    border:none;
+    color: white;
+    background:  linear-gradient(to right, #7c5b97, #6a71be);;
+}
+
+
+.community-guidelines {
+    margin-top: 50px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 20px;
+    width: 580px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.community-guidelines-title h2 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    color: #6a71be;
+}
+
+.community-guidelines-body ol {
+    margin: 0;
+    padding-left: 18px;
+    color: #333;
+    font-size: 15px;
+    list-style-type: disc;
+}

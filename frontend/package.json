@@ -19,6 +19,7 @@
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.1.0",
     "react-router": "^7.6.3",
+    "react-router-dom": "^7.7.0",
     "react-spinner": "^0.2.7",
     "react-spinners": "^0.17.0"
   },

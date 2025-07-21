@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Shield, Lock, Users, Heart, CloudCog } from "lucide-react";
-import "../styles/form.css"
+// import "../styles/form.css"
+import "./form.css";
 import axios from "axios"
-import Loading from "./loading";
+import Loading from "../loader/loading";
 
 
-const Form = () => {
+const AuthForm = () => {
 
     const [signup, setSignup] = useState(false);
     const [errmsg, setErrmsg] = useState("");
@@ -16,8 +17,14 @@ const Form = () => {
     const signInemailRef = useRef();
     const signInpasswordRef = useRef();
     const [loading, setLoading] = useState(false);
+    const [accessToken, setAccessToken] = useState();
+    const [refreshToken, setRefreshToken] = useState();
+
+
+
 
     const createAccount = async (e) => {
+
         e.preventDefault();
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
@@ -66,7 +73,10 @@ const Form = () => {
             }
         })
             .then(response => {
-                console.log(response.data)
+                setAccessToken(response.data.accessToken)
+                setRefreshToken(response.data.refreshToken)
+                localStorage.setItem("accessToken", accessToken)
+                localStorage.setItem("refreshToken", refreshToken)
             })
             .catch(error => {
                 console.log("error", error)
@@ -91,11 +101,11 @@ const Form = () => {
                 loading ? <Loading /> :
                     <div className="main">
                         <div className="main-text">
-                            <Heart size={30} color="white" style={{ top: "30px", borderRadius: "50px", padding: "10px", background: "linear-gradient(to right,#600fa1, #1525cf)" }} />
+                            <Heart size={50} color="white" style={{ marginTop: signup ? "180px" : "40px", borderRadius: "50px", padding: "10px", background: "linear-gradient(to right,#600fa1, #1525cf)" }} />
                             <h1>Confess</h1>
                             <p style={{ color: "gray" }}>Share your thoughts anonymously</p>
                         </div>
-                        <div className="box" style={{ marginTop: "10px", height: signup ? "550px" : "400px" }}>
+                        <div className="box" style={{ marginTop: "10px", height: signup ? "610px" : "420px" }}>
 
                             <div className="top">
                                 <span><Shield size={15} />Anonymous</span>
@@ -140,4 +150,4 @@ const Form = () => {
         </>
     )
 }
-export default Form;
+export default AuthForm;

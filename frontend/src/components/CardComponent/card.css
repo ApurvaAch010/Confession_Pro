@@ -1,9 +1,11 @@
 .cards{
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
+/* background: red; */
+/* width: 100%; */
 
   /* align-items: center; */
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   margin: 25px 10px 25px 10px;
   gap: 20px;
 }
@@ -17,12 +19,13 @@
   display: flex;
   padding: 10px;
   gap: 7px;
-  align-items: center;
+  /* align-items: center; */
 }
 
 .card-left{
   background-color: rgb(214, 208, 208);
-  padding: 7px;
+  padding: 10px;
+  height: 50px;
   border-radius: 12px;
 }
 
