@@ -3,7 +3,7 @@ import "./navbar.css";
 import { Link, NavLink } from "react-router";
 
 const Navbar = () => {
-    const token = JSON.parse(localStorage.getItem("accessToken"))||null;
+    const token = localStorage.getItem("accessToken")||null;
 
     return (
         <nav className="navbar">

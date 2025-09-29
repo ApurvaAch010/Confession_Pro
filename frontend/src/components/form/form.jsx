@@ -3,10 +3,13 @@ import { Shield, Lock, Users, Heart, CloudCog } from "lucide-react";
 // import "../styles/form.css"
 import "./form.css";
 import axios from "axios"
+import {useNavigate} from "react-router-dom"
 import Loading from "../loader/loading";
 
 
-const AuthForm = () => {
+const    AuthForm = () => {
+
+    const nav=useNavigate()
 
     const [signup, setSignup] = useState(false);
     const [errmsg, setErrmsg] = useState("");
@@ -43,6 +46,7 @@ const AuthForm = () => {
             .then(response => {
                 console.log(response.data.message)
                 alert(response.data.message)
+                setSignup(!signup)
             })
             .catch(error => {
                 if (error.response) {
@@ -73,10 +77,12 @@ const AuthForm = () => {
             }
         })
             .then(response => {
-                setAccessToken(response.data.accessToken)
-                setRefreshToken(response.data.refreshToken)
-                localStorage.setItem("accessToken", accessToken)
-                localStorage.setItem("refreshToken", refreshToken)
+                console.log(response)
+                setAccessToken(response.data.result.accessToken)
+                setRefreshToken(response.data.result.refreshToken)
+                localStorage.setItem("accessToken", response.data.result.accessToken)
+                localStorage.setItem("refreshToken", response.data.result.refreshToken)
+                nav("/")
             })
             .catch(error => {
                 console.log("error", error)
