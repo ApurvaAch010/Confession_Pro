@@ -27,10 +27,10 @@ const Posts = () => {
 
             const res = await axios.post(
                 "http://localhost:8080/confess/posts/toggle-like",
-                { postId: id }, // body
+                { postId: id }, 
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`, // send token
+                        Authorization: `Bearer ${token}`, 
                     },
                 }
             );
@@ -64,7 +64,7 @@ const Posts = () => {
                                     <User size={30} color="purple" />
                                 </div>
                                 <div className="title-text">
-                                    <h1>{post.is_anonymous.toUpperCase ? "Anonymous" : (post.username || "User")}</h1>
+                                    <h1>{post.is_anonymous ? "Anonymous" : (post.username || "User")}</h1>
                                     <div className="title-text-sub">
                                         <p>
                                             <Clock size={10} /> {new Date(post.created_at).toLocaleString()}

@@ -9,7 +9,7 @@ class Authorization {
     register = async (req, res, next) => {
         console.log("req.body:", req.body)
         try {
-            let { username, email, password,confirmPassword } = req.body
+            let { username, email, password, confirmPassword } = req.body
             let newpass = await bcrypt.hash(password, 10);
             const user = { username, email, password_hash: newpass }
             pool.query(`INSERT INTO users SET ?`, user, (err, result) => {
@@ -102,10 +102,27 @@ class Authorization {
         try {
 
             const loggedInUser = req.user;
+
+
+            const getUserPosts = () => {
+                return new Promise((resolve, reject) => {
+                    pool.query(
+                        'SELECT * FROM confessions WHERE user_id=?',
+                        [req.user.id],
+                        (err, result) => {
+                            if (err) reject(err);
+                            else resolve(result);
+                        }
+                    );
+                });
+            };
+
+            let userPosts = await getUserPosts();
             res.status(200).json({
                 result: {
                     username: loggedInUser.username,
-                    email: loggedInUser.email
+                    email: loggedInUser.email,
+                    posts:userPosts
                 },
                 message: "Your profile",
                 meta: null
@@ -114,22 +131,22 @@ class Authorization {
 
         } catch (error) {
             throw new AppErr({ message: "Problem while loading dashboard" })
-            // next(error);
+
         }
     }
 
     logout = async (req, res, next) => {
         try {
-            const user=req.user
+            const user = req.user
 
-            // Use UPDATE instead of DELETE to clear tokens
+
             pool.query(
                 'UPDATE users SET access_token = NULL, refresh_token = NULL WHERE id = ?',
                 [user.id],
                 (err, results) => {
                     if (err) {
                         console.log(err);
-                        // Use 500 for server errors
+
                         return res.status(500).json({ error: "Database error" });
                     }
 

@@ -1,0 +1,36 @@
+.pfp-top {
+    display: flex;
+    justify-content: safe;
+    align-items: center;
+    padding: 10px 10px;
+    background-color: whitesmoke;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pfp-main {
+    display: flex;
+    padding-left: 50px;
+}
+
+.pfp-box {
+  display: flex;
+  justify-content: space-evenly; 
+  align-items: center;      
+  margin: 40px auto;         
+  max-width: 600px;          
+  width: 90%;               
+  padding: 20px;            
+  background: #f9f9f9;       
+  border-radius: 12px;       
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+  /* text-align: center;      */
+}
+
+.attributes{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+span{
+    padding-right: 10px;
+}

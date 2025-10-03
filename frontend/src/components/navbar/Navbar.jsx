@@ -16,7 +16,7 @@ const Navbar = () => {
                 {token ? (
                     <>
                         <button className="navbar-btn"><Plus size={12} /> New confession</button>
-                        <span className="navbar-pfp"><UserRound size={19} /></span>
+                       <NavLink to={'/profile'} style={{textDecoration:"none"}} className="navbar-pfp"><UserRound size={19} /></NavLink>
                     </>
                 ) : (
                     <NavLink className="navbar-btn" to={'/auth'} >Sign In / Sign Up</NavLink>
