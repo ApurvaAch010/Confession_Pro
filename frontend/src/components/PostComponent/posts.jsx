@@ -5,12 +5,27 @@ import { useState, useEffect } from "react";
 
 const Posts = () => {
     const [posts, setPosts] = useState([]);
+    const [user, setUser] = useState();
+    const token = localStorage.getItem("accessToken") || null;
+
+    const fetchUser = async () => {
+        try {
+            let res = await axios.get("http://localhost:8080/confess/auth/dashboard", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setUser(res.data.result);
+        } catch (err) {
+            console.log("Error fetching dashboard", err);
+
+        }
+    }
 
     const fetchPosts = async () => {
         try {
             const res = await axios.get("http://localhost:8080/confess/posts/getAll");
-            console.log(res.data.result.confessions);
-            setPosts(res.data.result.confessions); // updated to match backend response
+            setPosts(res.data.result.confessions);
         } catch (err) {
             console.error("Error fetching posts:", err);
         }
@@ -27,15 +42,13 @@ const Posts = () => {
 
             const res = await axios.post(
                 "http://localhost:8080/confess/posts/toggle-like",
-                { postId: id }, 
+                { postId: id },
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`, 
+                        Authorization: `Bearer ${token}`,
                     },
                 }
             );
-            console.log(res.data.message);
-            console.log("Updated like count:", res.data.likeCount);
             setPosts(prev =>
                 prev.map(post =>
                     post.id === id ? { ...post, likeCount: res.data.likeCount } : post
@@ -50,6 +63,7 @@ const Posts = () => {
 
     useEffect(() => {
         fetchPosts();
+        fetchUser();
     }, []);
 
     return (
@@ -79,14 +93,11 @@ const Posts = () => {
                             </div>
                             <div className="footer">
                                 <div className="like">
-                                    <button style={{ textDecoration: "none", border: "none" }} onClick={() => { toggleLike(post.id) }}>
+                                    <button style={{ textDecoration: "none", border: "none" }}
+                                        onClick={() => { user ? toggleLike(post.id) : alert("PLease login-first") }}>
                                         <Heart size={20} color="gray" />
                                         <span>{post.likeCount ?? 0}</span>
                                     </button>
-                                </div>
-                                <div className="comment">
-                                    <MessageCircle size={20} color="gray" />
-                                    <span>{post.comments ?? 0}</span>
                                 </div>
                             </div>
                         </div>

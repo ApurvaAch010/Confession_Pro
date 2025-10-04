@@ -1,4 +1,4 @@
-import { ArrowLeft, Heart, User, Clock, MessageCircle } from "lucide-react";
+import { ArrowLeft, Heart, User, Clock, Trash2 } from "lucide-react";
 import "./profile.css";
 import { NavLink, useNavigate } from "react-router";
 import axios from "axios";
@@ -20,22 +20,35 @@ const Profile = () => {
             });
             setUserData(res.data.result);
         } catch (err) {
-            if (err.response?.data?.error === "Invalid/expired token") {
+            if (err.response.status === 401) {
                 alert("Please re-login");
                 nav("/auth");
+                localStorage.removeItem("accessToken")
+                localStorage.removeItem("refreshToken")
             }
-            console.log("ERROR WHILE FETCHING DASHBOARD", err.response?.data);
+            console.log("ERROR WHILE FETCHING DASHBOARD", err.response.data);
         }
     };
+
+    const deletePost = async (id) => {
+        try {
+            const res = await axios.delete(`http://localhost:8080/confess/posts/delete/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+          
+                fetchUserDashboard();
+            
+        }
+        catch (err) {
+            console.log("Error While deleting", err)
+        }
+    }
 
     useEffect(() => {
         fetchUserDashboard();
     }, []);
-
-    const toggleLike = (postId) => {
-        console.log("Like toggled for:", postId);
-        // TODO: call backend to toggle like
-    };
 
     return (
         <>
@@ -72,16 +85,16 @@ const Profile = () => {
                             </div>
                             <div className="attributes">
                                 <div className="firstattr">
-                                    <p>2</p>
+                                    <p>{userData.confessionCount}</p>
                                     <span>Confessions</span>
                                 </div>
                                 <div className="secondattr">
-                                    <p>11</p>
+                                    <p>{userData.totalLikes}</p>
                                     <span>Likes</span>
                                 </div>
                                 <div className="thirdattr">
-                                    <p>20</p>
-                                    <span>Comments</span>
+                                    <p><Trash2 /></p>
+                                    <span>Dustbin</span>
                                 </div>
                             </div>
                         </div>
@@ -113,16 +126,16 @@ const Profile = () => {
                                         <div className="footer">
                                             <div className="like">
                                                 <button
-                                                    style={{ textDecoration: "none", border: "none" }}
-                                                    onClick={() => toggleLike(post.id)}
+                                                    style={{ textDecoration: "none", border: "none" }} disabled={true}
                                                 >
                                                     <Heart size={20} color="gray" />
                                                     <span>{post.likeCount ?? 0}</span>
                                                 </button>
                                             </div>
-                                            <div className="comment">
-                                                <MessageCircle size={20} color="gray" />
-                                                <span>{post.comments ?? 0}</span>
+                                            <div className="delete">
+                                                <button style={{ textDecoration: "none", border: "none" }} onClick={() => { deletePost(post.id) }}>
+                                                    <Trash2 size={20} color="gray" />
+                                                </button>
                                             </div>
                                         </div>
                                     </div>

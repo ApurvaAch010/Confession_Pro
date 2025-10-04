@@ -8,5 +8,5 @@ import RouterComponent from './routers/router.component';
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <RouterComponent />
-  </StrictMode>,
+  </StrictMode>
 )

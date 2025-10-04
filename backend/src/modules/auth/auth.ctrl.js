@@ -107,7 +107,18 @@ class Authorization {
             const getUserPosts = () => {
                 return new Promise((resolve, reject) => {
                     pool.query(
-                        'SELECT * FROM confessions WHERE user_id=?',
+                        `SELECT 
+          c.id,
+          c.title,
+          c.content,
+          c.created_at,
+          c.is_anonymous,
+          COUNT(pl.id) AS likeCount
+       FROM confessions c
+       LEFT JOIN post_likes pl ON c.id = pl.post_id
+       WHERE c.user_id = ?
+       GROUP BY c.id
+       ORDER BY c.created_at DESC`,
                         [req.user.id],
                         (err, result) => {
                             if (err) reject(err);
@@ -117,12 +128,19 @@ class Authorization {
                 });
             };
 
+
+
             let userPosts = await getUserPosts();
+            let confessionCount = userPosts.length;
+            let totalLikes = userPosts.reduce((sum, post) => sum + post.likeCount, 0);
             res.status(200).json({
                 result: {
+                    userId:loggedInUser.id,
                     username: loggedInUser.username,
                     email: loggedInUser.email,
-                    posts:userPosts
+                    posts: userPosts,
+                    confessionCount: confessionCount,
+                    totalLikes: totalLikes
                 },
                 message: "Your profile",
                 meta: null
@@ -138,7 +156,7 @@ class Authorization {
     logout = async (req, res, next) => {
         try {
             const user = req.user
-
+            
 
             pool.query(
                 'UPDATE users SET access_token = NULL, refresh_token = NULL WHERE id = ?',

@@ -3,13 +3,13 @@ import { Shield, Lock, Users, Heart, CloudCog } from "lucide-react";
 // import "../styles/form.css"
 import "./form.css";
 import axios from "axios"
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import Loading from "../loader/loading";
 
 
-const    AuthForm = () => {
+const AuthForm = () => {
 
-    const nav=useNavigate()
+    const nav = useNavigate()
 
     const [signup, setSignup] = useState(false);
     const [errmsg, setErrmsg] = useState("");
@@ -49,6 +49,7 @@ const    AuthForm = () => {
                 setSignup(!signup)
             })
             .catch(error => {
+                alert(error.response.data.message);
                 if (error.response) {
                     console.log("Backend response error:", error.response.data);
                     alert(error.response.data.message || "Something went wrong");
@@ -67,7 +68,7 @@ const    AuthForm = () => {
         e.preventDefault();
         const email = signInemailRef.current.value;
         const password = signInpasswordRef.current.value;
-        // cosnsole.log("email:", email, "password:", password)
+
         await axios.post('http://localhost:8080/confess/auth/login', {
             email,
             password
@@ -77,7 +78,6 @@ const    AuthForm = () => {
             }
         })
             .then(response => {
-                console.log(response)
                 setAccessToken(response.data.result.accessToken)
                 setRefreshToken(response.data.result.refreshToken)
                 localStorage.setItem("accessToken", response.data.result.accessToken)
@@ -85,6 +85,7 @@ const    AuthForm = () => {
                 nav("/")
             })
             .catch(error => {
+                alert(error.response.data.message);
                 console.log("error", error)
 
             })

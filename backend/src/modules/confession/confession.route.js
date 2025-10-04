@@ -15,7 +15,7 @@ router.get('/get/:id',LoginCheck,Confess.getPostById)
 
 router.post('/toggle-like',LoginCheck,Confess.toggleLike)
 
-router.put('/update/:id',bodyvalidator(updateConf),LoginCheck,Confess.update)
+
 
 router.delete('/delete/:id',LoginCheck,Confess.delete)
 
