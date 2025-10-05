@@ -15,9 +15,13 @@ router.get('/get/:id',LoginCheck,Confess.getPostById)
 
 router.post('/toggle-like',LoginCheck,Confess.toggleLike)
 
-
-
 router.delete('/delete/:id',LoginCheck,Confess.delete)
+
+router.get('/bin',LoginCheck,Confess.bin)
+
+router.put('/restore/:id',LoginCheck,Confess.restore)
+
+router.put('/autoDelete',LoginCheck,Confess.autoDeletePosts);
 
 export default router
 

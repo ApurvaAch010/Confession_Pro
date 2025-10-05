@@ -3,6 +3,7 @@ import "./createconfess.css";
 import { useRef, useState } from "react";
 import axios from "axios";
 import { NavLink, useNavigate } from "react-router";
+import NavbarTop from "../navbar-top/navbartop";
 
 const CreateConfession = () => {
 
@@ -46,20 +47,7 @@ const CreateConfession = () => {
 
   return (
     <>
-      <div className="content-top">
-        <div className="content-main">
-          <div className="left-content">
-            <NavLink to="/" style={{textDecoration:"none",color:"black"}}>
-            <MoveLeft className="icon" />
-            <p>Back</p></NavLink>
-          </div>
-          <div className="right-content">
-            <Heart size={30} className="icon-heart" color="white" />
-            <h1>New Confession</h1>
-          </div>
-
-        </div>
-      </div>
+      <NavbarTop pageTitle={"New confession"}/>
       <div className="confess-main" style={{ background: "aliceblue", width: "100%", height: "160vh" }}>
 
         <div className="box-confess">

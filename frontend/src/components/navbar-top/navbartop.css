@@ -1,0 +1,13 @@
+.pfp-top {
+    display: flex;
+    justify-content: safe;
+    align-items: center;
+    padding: 10px 10px;
+    background-color: whitesmoke;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pfp-main {
+    display: flex;
+    padding-left: 50px;
+}

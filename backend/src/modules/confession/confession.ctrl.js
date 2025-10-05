@@ -90,7 +90,7 @@ class Confession {
     toggleLike = async (req, res, next) => {
         try {
             const { postId } = req.body;
-            const userId = req.user.id; 
+            const userId = req.user.id;
 
             pool.query(
                 "INSERT INTO post_likes (post_id, user_id) VALUES (?, ?)",
@@ -98,7 +98,6 @@ class Confession {
                 (err, result) => {
                     if (err) {
                         if (err.code === "ER_DUP_ENTRY") {
-                            // Already liked → unlike
                             pool.query(
                                 "DELETE FROM post_likes WHERE post_id = ? AND user_id = ?",
                                 [postId, userId],
@@ -107,8 +106,6 @@ class Confession {
                                         console.error(delErr);
                                         return res.status(500).json({ error: "Database error" });
                                     }
-
-                                    // Get updated count
                                     pool.query(
                                         "SELECT COUNT(*) AS likeCount FROM post_likes WHERE post_id = ?",
                                         [postId],
@@ -130,7 +127,6 @@ class Confession {
                             return res.status(500).json({ error: "Database error" });
                         }
                     } else {
-                        // Successfully liked → get updated count
                         pool.query(
                             "SELECT COUNT(*) AS likeCount FROM post_likes WHERE post_id = ?",
                             [postId],
@@ -153,69 +149,124 @@ class Confession {
         }
     };
 
-    update = async (req, res, next) => {
+
+    delete = async (req, res) => {
+        const id = req.params.id;
+
         try {
-            const id = req.params.id;
-            const { title, content, is_anonymous } = req.body;
-
-            pool.query('SELECT * FROM confessions WHERE id=?', [id], (err, result) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).json({ error: "Database error" });
-                }
-                if (result.length === 0) {
-                    return res.status(404).json({ error: "Confession not found" });
-                }
-
-                const update = result[0];
-
+            const post = await new Promise((resolve, reject) => {
                 pool.query(
-                    'UPDATE confessions SET title=?, content=?, is_anonymous=? WHERE id=?',
-                    [
-                        title ? title : update.title,
-                        content ? content : update.content,
-                        typeof is_anonymous !== 'undefined' ? is_anonymous : update.is_anonymous,
-                        id
-                    ],
-                    (errors) => {
-                        if (errors) {
-                            console.log(errors);
-                            return res.status(500).json({ error: "Database error" });
-                        }
-                        res.status(200).json({
-                            result: { confessionId: id },
-                            message: "Successfully updated"
-                        });
+                    "SELECT * FROM confessions WHERE id = ?",
+                    [id],
+                    (err, results) => {
+                        if (err) return reject(err);
+                        if (results.length === 0) return reject("Post not found");
+                        resolve(results[0]);
                     }
                 );
             });
+
+            await new Promise((resolve, reject) => {
+                pool.query(
+                    `INSERT INTO deleted_confessions 
+         (original_post_id, user_id, title, content, is_anonymous) 
+         VALUES (?, ?, ?, ?, ?)`,
+                    [post.id, post.user_id, post.title, post.content, post.is_anonymous],
+                    (err) => (err ? reject(err) : resolve())
+                );
+            });
+            await new Promise((resolve, reject) => {
+                pool.query("DELETE FROM post_likes WHERE post_id = ?", [id], (err) =>
+                    err ? reject(err) : resolve()
+                );
+            });
+            await new Promise((resolve, reject) => {
+                pool.query("DELETE FROM confessions WHERE id = ?", [id], (err) =>
+                    err ? reject(err) : resolve()
+                );
+            });
+
+            res.status(200).json({ message: "Post moved to bin successfully" });
+
         } catch (err) {
-            throw new AppErr({ message: "Error in update confession", code: 500 });
+           console.log("eRROR",err);
+
+            if (err === "Post not found") {
+                return res.status(404).json({ error: "Post not found" });
+            }
+
+            res.status(500).json({
+                error: "Something went wrong while deleting the post",
+                details: err,
+            });
+        }
+
+    }
+
+    bin = async (req, res, next) => {
+        const userId = req.user.id;
+        try {
+            const binPosts = await new Promise((resolve, reject) => {
+                pool.query("SELECT * FROM deleted_confessions WHERE user_id=?", [userId], (err, results) => {
+                    if (err) reject(err);
+                    else if (results.length === 0) reject("No deleted Posts");
+                    else resolve(results);
+
+                })
+            })
+            if (binPosts.length === 0) {
+                return res.status(200).json({ message: "No deleted posts found", data: [] });
+            }
+
+            res.status(200).json({ message: "Deleted posts fetched successfully", data: binPosts })
+
+        }
+        catch (err) {
+            console.log(err);
+            res.status(500).json({ error: "Something went wrong" });
         }
     }
 
-    delete = async (req, res, next) => {
+    restore = async (req, res, next) => {
+        const deletedId = req.params.id
         try {
-            const id = req.params.id;
-
-            pool.query('DELETE FROM confessions WHERE id=?', [id], (err, results) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).json({ error: "Database error" });
-                }
-                if (results.affectedRows === 0) {
-                    return res.status(404).json({ error: "No such confession exists" });
-                }
-
-                res.status(200).json({
-                    result: { confessionId: id },
-                    message: "Successfully deleted",
-                    meta: null
+            const post = await new Promise((resolve, reject) => {
+                pool.query("SELECT * FROM deleted_confessions WHERE id=?", [deletedId], (err, results) => {
+                    if (err) reject(err);
+                    else if (results.length === 0) reject("Post not found");
+                    else resolve(results[0]);
                 });
             });
-        } catch (err) {
-            throw new AppErr({ message: "Error in delete confession", code: 500 });
+
+            await new Promise((resolve, reject) => {
+                pool.query(
+                    `INSERT INTO confessions (id, user_id, title, content, is_anonymous)
+                 VALUES (?, ?, ?, ?, ?)`,
+                    [post.original_post_id, post.user_id, post.title, post.content, post.is_anonymous],
+                    (err) => (err ? reject(err) : resolve())
+                );
+            });
+
+            await new Promise((resolve, reject) => {
+                pool.query("DELETE FROM deleted_confessions WHERE id=?", [deletedId], (err) => (err ? reject(err) : resolve()));
+            });
+
+            res.status(200).json({ message: "Post restored successfully" });
         }
+        catch (err) {
+            console.log(err);
+            res.status(500).json({ error: "Something went wrong" });
+        }
+    }
+
+    autoDeletePosts = () => {
+        pool.query(
+            "DELETE FROM deleted_confessions WHERE deleted_at < NOW() - INTERVAL 15 DAY",
+            (err) => {
+                if (err) console.log("Auto-delete error:", err);
+            }
+        );
+
     }
 }
 

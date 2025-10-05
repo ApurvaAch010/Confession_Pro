@@ -4,6 +4,7 @@ import { NavLink, useNavigate } from "react-router";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Loading from "../loader/loading";
+import NavbarTop from "../navbar-top/navbartop";
 
 const Profile = () => {
     const token = localStorage.getItem("accessToken") || null;
@@ -37,9 +38,10 @@ const Profile = () => {
                     Authorization: `Bearer ${token}`,
                 },
             })
-          
-                fetchUserDashboard();
-            
+            alert(res.data.message)
+
+            fetchUserDashboard();
+
         }
         catch (err) {
             console.log("Error While deleting", err)
@@ -53,26 +55,7 @@ const Profile = () => {
     return (
         <>
             <div className="pfp-container">
-                <div className="pfp-top">
-                    <div className="pfp-arrow">
-                        <NavLink to="/" style={{ textDecoration: "none", color: "black" }}>
-                            <ArrowLeft />
-                            <span>Back</span>
-                        </NavLink>
-                    </div>
-                    <div className="pfp-main">
-                        <Heart
-                            size={35}
-                            color="white"
-                            style={{
-                                borderRadius: "50px",
-                                padding: "10px",
-                                background: "linear-gradient(to right,#600fa1, #1525cf)",
-                            }}
-                        />
-                        <h1 style={{ fontSize: "20px", marginTop: "5px", paddingLeft: "5px" }}>Profile</h1>
-                    </div>
-                </div>
+                <NavbarTop pageTitle={"Profile"} />
 
                 {userData ? (
                     <>
@@ -93,8 +76,11 @@ const Profile = () => {
                                     <span>Likes</span>
                                 </div>
                                 <div className="thirdattr">
-                                    <p><Trash2 /></p>
-                                    <span>Dustbin</span>
+                                    <NavLink to="/bin" style={{textDecoration:"none", color:"black"}}>
+                                        <p><Trash2 color="gray" /></p>
+                                        <span>Bin</span>
+                                    </NavLink>
+
                                 </div>
                             </div>
                         </div>
